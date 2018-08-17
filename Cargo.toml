@@ -14,6 +14,7 @@ structopt = "0.2.10"
 log = "0.4.3"
 clap_flags = "0.2.0"
 failure = "0.1.2"
+exitfailure = "0.5.1"
 
 [dev-dependencies]
 failure = "0.1.2"
