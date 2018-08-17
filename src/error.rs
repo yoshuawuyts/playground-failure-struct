@@ -1,5 +1,6 @@
 use failure::{Backtrace, Context, Fail};
 use std::fmt::{self, Display};
+use std::io;
 use std::result;
 
 /// A specialized [`Result`] type for this crate's operations.
@@ -27,19 +28,22 @@ pub struct Error {
 /// It is used with the [`Error`] struct.
 ///
 /// [`Error`]: std.struct.Error.html
-#[derive(Copy, Clone, Eq, PartialEq, Debug, Fail)]
+#[derive(Debug, Fail)]
 pub enum ErrorKind {
   /// Any error not part of this list.
   #[fail(display = "Generic error.")]
   Other,
+  /// An error caused by an IO failure.
+  #[fail(display = "{}", _0)]
+  Io(#[cause] io::Error),
 }
 
 impl Error {
   /// Access the [`ErrorKind`] member.
   ///
   /// [`ErrorKind`]: enum.ErrorKind.html
-  pub fn kind(&self) -> ErrorKind {
-    *self.inner.get_context()
+  pub fn kind(&self) -> &ErrorKind {
+    &*self.inner.get_context()
   }
 }
 

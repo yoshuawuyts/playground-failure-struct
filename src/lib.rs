@@ -5,6 +5,7 @@ extern crate clap_flags;
 extern crate failure;
 
 use failure::ResultExt;
+use std::io;
 
 mod cli;
 mod error;
@@ -12,13 +13,20 @@ mod error;
 pub use cli::Cli;
 pub use error::{Error, ErrorKind, Result};
 
-/// Does a thing
+/// Test function.
 pub fn do_thing() -> ::Result<()> {
-  do_inner_thing().context(ErrorKind::Other)?;
+  do_io_thing().context(ErrorKind::Other)?;
   Ok(())
 }
 
-fn do_inner_thing() -> ::Result<()> {
+/// Test function.
+fn do_io_thing() -> ::Result<()> {
+  Err(ErrorKind::Io(io::Error::from_raw_os_error(98)))?;
+  Ok(())
+}
+
+/// Test function.
+pub fn do_regular_thing() -> ::Result<()> {
   Err(ErrorKind::Other)?;
   Ok(())
 }
